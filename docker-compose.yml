@@ -45,6 +45,36 @@ services:
       - cockroachnet
     platform: linux/amd64  # Specify platform
 
+  # Order Service
+  order-service:
+    build: ./microservices/order-service
+    ports:
+      - "3001:3001"
+    depends_on:
+      - cockroachdb1
+    networks:
+      - cockroachnet
+
+  # Inventory Service
+  inventory-service:
+    build: ./microservices/inventory-service
+    ports:
+      - "3002:3002"
+    depends_on:
+      - cockroachdb1
+    networks:
+      - cockroachnet
+
+  # Payment Service
+  payment-service:
+    build: ./microservices/payment-service
+    ports:
+      - "3003:3003"
+    depends_on:
+      - cockroachdb1
+    networks:
+      - cockroachnet
+
 networks:
   cockroachnet:
     driver: bridge
