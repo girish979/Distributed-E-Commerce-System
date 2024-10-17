@@ -36,7 +36,7 @@ cd microservices/order-service
 •	pg: for connecting to CockroachDB.
 
 `npm install express pg`  
-`npm install typescript ts-node @types/node @types/express --save-dev`
+`npm install typescript ts-node @types/node @types/express @types/pg --save-dev`
 
 
 4.	Create a tsconfig.json file:
@@ -231,4 +231,34 @@ services:
 networks:
   cockroachnet:
     driver: bridge
+```
+
+Connect microservices to cockroachdb
+
+Update app.ts in order-services to and see if you can connect to cockroachdb
+```ts
+import { Client } from 'pg';
+
+// Connection string for the CockroachDB cluster
+const client = new Client({
+  user: 'root',
+  host: 'cockroachdb1',  // the service name of the first CockroachDB node
+  database: 'defaultdb',
+  port: 26257,
+  ssl: false,  // since we are using --insecure
+});
+
+client.connect()
+  .then(() => console.log('Connected to CockroachDB'))
+  .catch((err: Error) => console.error('Connection error', err.stack));
+
+// Example query with typed parameters
+client.query('SELECT NOW()', (err: Error | null, res: any) => {
+  if (err) {
+    console.error(err);
+  } else {
+    console.log('Current Time:', res.rows);
+  }
+  client.end();
+});
 ```
