@@ -1,0 +1,50 @@
+version: '3'
+services:
+  cockroachdb1:
+    image: cockroachdb/cockroach:v21.1.6
+    command: start --insecure --join=cockroachdb1,cockroachdb2,cockroachdb3
+    ports:
+      - "26257:26257"
+      - "8080:8080"
+    volumes:
+      - ./cockroach-data1:/cockroach/cockroach-data
+    networks:
+      - cockroachnet
+    platform: linux/amd64  # Specify platform
+
+  cockroachdb2:
+    image: cockroachdb/cockroach:v21.1.6
+    command: start --insecure --join=cockroachdb1,cockroachdb2,cockroachdb3
+    ports:
+      - "26258:26257"
+      - "8081:8080"
+    volumes:
+      - ./cockroach-data2:/cockroach/cockroach-data
+    networks:
+      - cockroachnet
+    platform: linux/amd64  # Specify platform
+
+  cockroachdb3:
+    image: cockroachdb/cockroach:v21.1.6
+    command: start --insecure --join=cockroachdb1,cockroachdb2,cockroachdb3
+    ports:
+      - "26259:26257"
+      - "8082:8080"
+    volumes:
+      - ./cockroach-data3:/cockroach/cockroach-data
+    networks:
+      - cockroachnet
+    platform: linux/amd64  # Specify platform
+
+  init:
+    image: cockroachdb/cockroach:v21.1.6
+    command: init --insecure --host=cockroachdb1
+    depends_on:
+      - cockroachdb1
+    networks:
+      - cockroachnet
+    platform: linux/amd64  # Specify platform
+
+networks:
+  cockroachnet:
+    driver: bridge

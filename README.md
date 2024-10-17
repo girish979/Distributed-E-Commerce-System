@@ -9,3 +9,6 @@ Deliverables for the Project:
 	4.	Deployed Version (Optional): You can deploy the project on a cloud platform (AWS, GCP, Azure) to demonstrate a real-world environment with scalability.
 
 This project will give you a well-rounded portfolio showing hands-on experience with distributed systems, Kafka, Redis, message queues, and databases. It demonstrates your ability to design, implement, and scale distributed architectures, which is exactly what employers in FAANG+ companies look for.
+
+----------------------------------------------------------------
+Use node 20
