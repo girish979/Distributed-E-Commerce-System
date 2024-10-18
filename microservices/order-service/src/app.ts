@@ -1,7 +1,11 @@
 import  { Request, Response } from 'express';
 import express from 'express';
+import { createOrder } from './controllers/orderController';
 
 const app = express();
+
+// Add middleware to parse JSON request bodies
+app.use(express.json());
 
 // Basic route
 app.get('/', (req: Request, res: Response) => {
@@ -11,6 +15,21 @@ app.get('/', (req: Request, res: Response) => {
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Order service is listening on port ${PORT}`);
+});
+
+// POST route for creating an order
+app.post('/orders', (req: Request, res: Response) => {
+  const orderData = req.body;
+
+  console.log(`order-service: Order data: ${JSON.stringify(orderData)}`);
+  
+  // Call the createOrder function to handle Kafka message publishing
+  createOrder(orderData)
+    .then(() => res.status(201).send('Order created successfully'))
+    .catch((error) => {
+      console.error('Error creating order:', error);
+      res.status(500).send('Failed to create order');
+    });
 });
 
 
