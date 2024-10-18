@@ -8,7 +8,7 @@ Kafka relies on Zookeeper to manage the cluster, so we’ll also set up Zookeepe
 
 Step 1: Add Zookeeper and Kafka to docker-compose.yml
 
-Add Zookeeper and Kafka services to your docker-compose.yml file:
+Add Zookeeper and Kafka services to docker-compose.yml file:
 
 ```yaml
   zookeeper:
@@ -51,11 +51,11 @@ Run the following command to rebuild and start the services with Kafka and Zooke
 
 `docker-compose up --build -d`
 
-This will now start your CockroachDB, Node.js microservices, Zookeeper, and Kafka.
+This will now start CockroachDB, Node.js microservices, Zookeeper, and Kafka.
 
 Step 4: Connect Node.js Microservices to Kafka
 
-Next, let’s connect your microservices to Kafka. We’ll use the kafkajs package in Node.js, which is a popular and easy-to-use Kafka client.
+Next, let’s connect microservices to Kafka. We’ll use the kafkajs package in Node.js, which is a popular and easy-to-use Kafka client.
 
 Step 4.1: Install Kafka Client (kafkajs) in Node.js
 

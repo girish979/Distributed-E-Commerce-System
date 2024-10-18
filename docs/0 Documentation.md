@@ -54,14 +54,15 @@ System Components:
 
 Prerequisites:
 
-	•	Docker and Docker Compose installed on your machine.
+	•	Docker and Docker Compose installed on machine.
 	•	Basic understanding of microservices, Docker, and distributed systems.
 
 Installation:
 
 	1.	Clone the repository:
 
-git clone https://github.com/your-repo/distributed-ecommerce.git
+git clone https://github.com/girish979/Distributed-E-Commerce-System.git
+
 cd distributed-ecommerce
 
 

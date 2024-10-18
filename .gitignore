@@ -38,3 +38,8 @@ Thumbs.db
 cockroach-data1/
 cockroach-data2/
 cockroach-data3/
+
+# Redis generated files
+data/redis-node*/nodes.conf
+data/redis-node*/appendonly.aof
+data/redis-node*/*

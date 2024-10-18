@@ -1,4 +1,4 @@
-Set up Node.js with TypeScript for your microservices now, before moving on to Redis.
+Set up Node.js with TypeScript for microservices now, before moving on to Redis.
 
 Step-by-Step: Setting Up Node.js Microservices with TypeScript
 
@@ -40,7 +40,7 @@ cd microservices/order-service
 
 
 4.	Create a tsconfig.json file:
-This file will tell TypeScript how to compile your code.
+This file will tell TypeScript how to compile code.
 ```
 {
   "compilerOptions": {
@@ -86,7 +86,7 @@ app.listen(PORT, () => {
 ```
 
 7.	Modify `package.json` scripts:
-In your `package.json`, add a script to run the TypeScript code using ts-node:
+In `package.json`, add a script to run the TypeScript code using ts-node:
 ```
 "scripts": {
   "start": "ts-node-dev --respawn src/app.ts",
@@ -149,7 +149,7 @@ CMD ["npm", "start"]
 Repeat this process for each service, ensuring you adjust the port numbers as needed (e.g., 3002 for inventory-service, 3003 for payment-service).
 
 	2.	Modify docker-compose.yml to Include Microservices
-In your docker-compose.yml, you can add each microservice like this:
+In docker-compose.yml, you can add each microservice like this:
 ```
 version: '3'
 services:
