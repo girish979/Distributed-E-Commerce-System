@@ -199,6 +199,31 @@ services:
     networks:
       - cockroachnet
 
+  # Prometheus service
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus:/etc/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - '9090:9090'
+    networks:
+      - cockroachnet
+
+  # Grafana service
+  grafana:
+    image: grafana/grafana-oss:latest
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    ports:
+      - '3000:3000'
+    networks:
+      - cockroachnet
+    depends_on:
+      - prometheus
+
 networks:
   cockroachnet:
     driver: bridge
