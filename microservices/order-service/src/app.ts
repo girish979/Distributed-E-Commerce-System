@@ -1,6 +1,6 @@
-import  { Request, Response } from 'express';
+import  { Request, Response, NextFunction } from 'express';
 import express from 'express';
-import { createOrder } from './controllers/orderController';
+import { createOrder, getOrder } from './controllers/orderController';
 
 const app = express();
 
@@ -31,6 +31,12 @@ app.post('/orders', (req: Request, res: Response) => {
       res.status(500).send('Failed to create order');
     });
 });
+
+// Route to get order data with caching
+app.get('/orders/:id', (req: Request, res: Response, next: NextFunction) => {
+  getOrder(req, res).catch(next);  // Handle async errors properly
+});
+
 
 
 /* CockroachDb Connection */
