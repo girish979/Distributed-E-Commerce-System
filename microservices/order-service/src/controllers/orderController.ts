@@ -5,7 +5,7 @@ import redis from '../redisClient';
 // Initialize Kafka
 const kafka = new Kafka({
   clientId: 'order-service',
-  brokers: ['kafka:9092'], // Use service name 'kafka' instead of 'localhost'
+  brokers: ['kafka1:9092', 'kafka2:9093', 'kafka3:9094'],
 });
 
 const producer = kafka.producer();

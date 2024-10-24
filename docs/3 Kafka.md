@@ -20,16 +20,46 @@ Add Zookeeper and Kafka services to docker-compose.yml file:
     networks:
       - cockroachnet
 
-  kafka:
+  kafka1:
     image: bitnami/kafka:latest
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9092
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
     ports:
       - "9092:9092"
+    networks:
+      - cockroachnet
+    depends_on:
+      - zookeeper
+
+  kafka2:
+    image: bitnami/kafka:latest
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9093
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
+    ports:
+      - "9093:9093"
+    networks:
+      - cockroachnet
+    depends_on:
+      - zookeeper
+
+  kafka3:
+    image: bitnami/kafka:latest
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9094
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:9094
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
+    ports:
+      - "9094:9094"
     networks:
       - cockroachnet
     depends_on:
@@ -77,7 +107,7 @@ import { Kafka } from 'kafkajs';
 // Initialize Kafka
 const kafka = new Kafka({
   clientId: 'order-service',
-  brokers: ['kafka:9092'], // Use service name 'kafka' instead of 'localhost'
+  brokers: ['kafka1:9092', 'kafka2:9093', 'kafka3:9094'], // Use service name 'kafka' instead of 'localhost'
 });
 
 const producer = kafka.producer();
@@ -140,7 +170,7 @@ import { Kafka } from 'kafkajs';
 // Initialize Kafka
 const kafka = new Kafka({
   clientId: 'inventory-service',
-  brokers: ['kafka:9092'], // Kafka broker address
+  brokers: ['kafka1:9092', 'kafka2:9093', 'kafka3:9094'], // Kafka broker address
 });
 
 const consumer = kafka.consumer({ groupId: 'inventory-group' });
@@ -207,3 +237,11 @@ docker logs <inventory-service-container-id>
 
 
 You should see that the Inventory Service receives the order event from Kafka and logs it.
+
+
+## Cluster
+
+Verify the output of below command
+```
+docker exec -it distributed-ecom-kafka1-1 kafka-broker-api-versions.sh --bootstrap-server kafka1:9092
+```

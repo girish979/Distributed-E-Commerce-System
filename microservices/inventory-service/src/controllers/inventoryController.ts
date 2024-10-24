@@ -3,7 +3,7 @@ import { Kafka } from 'kafkajs';
 // Initialize Kafka
 const kafka = new Kafka({
   clientId: 'inventory-service',
-  brokers: ['kafka:9092'], // Kafka broker address
+  brokers: ['kafka1:9092', 'kafka2:9093', 'kafka3:9094'],
 });
 
 const consumer = kafka.consumer({ groupId: 'inventory-group' });
