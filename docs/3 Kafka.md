@@ -245,3 +245,18 @@ Verify the output of below command
 ```
 docker exec -it distributed-ecom-kafka1-1 kafka-broker-api-versions.sh --bootstrap-server kafka1:9092
 ```
+
+
+## Check Kafka Topics via CLI
+1.	Run the Kafka CLI inside the Docker container:
+```
+docker exec -it <kafka_container_name> bash
+```
+2.	List Kafka topics:
+```
+kafka-topics.sh --bootstrap-server localhost:9092 --list
+```
+3.	Describe a topic to see partitions, replication, etc.:
+```
+kafka-topics.sh --bootstrap-server localhost:9092 --describe --topic test-topic
+```

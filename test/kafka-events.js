@@ -1,6 +1,8 @@
 import { Kafka } from 'kafkajs';
 
-const kafka = new Kafka({ brokers: ['kafka1:9092', 'kafka2:9093', 'kafka3:9094'] });
+const kafka = new Kafka({
+  brokers: ['localhost:29092', 'localhost:29093', 'localhost:29094']
+});
 const producer = kafka.producer();
 
 async function sendBulkEvents(count) {
@@ -17,4 +19,4 @@ async function sendBulkEvents(count) {
   await producer.disconnect();
 }
 
-sendBulkEvents(1000).catch(console.error);
+sendBulkEvents(100).catch(console.error);
