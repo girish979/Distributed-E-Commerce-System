@@ -35,7 +35,7 @@ add redis db using
 ```
 host: distributed-ecom-redis-node1-1   Port:6379
 host: distributed-ecom-redis-node2-1   Port:6380
-host: distributed-ecom-redis-node3-1   Port:6380
+host: distributed-ecom-redis-node3-1   Port:6381
 host: distributed-ecom-redis-node4-1   Port:6382
 host: distributed-ecom-redis-node5-1   Port:6383
 host: distributed-ecom-redis-node6-1   Port:6384
