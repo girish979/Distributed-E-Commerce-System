@@ -2,7 +2,7 @@
 
 1.	Setup Distributed  
 	- Database (Cockroach DB)  
-	- Message Queue (Redis)  
+	- Cache (Redis)  
 	- Event Processing (Kafka) 
 2. Codebase: Microservices written in Node.js.
 3.	Documentation:
