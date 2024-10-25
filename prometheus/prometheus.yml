@@ -6,9 +6,10 @@ scrape_configs:
     static_configs:
       - targets: ['kafka1:9991', 'kafka2:9992', 'kafka3:9993']
 
+  # Scrape Redis metrics using Redis Exporter
   - job_name: 'redis'
     static_configs:
-      - targets: ['redis-node1:6379', 'redis-node2:6380', 'redis-node3:6381', 'redis-node4:6382', 'redis-node5:6383', 'redis-node6:6384']
+      - targets: ['redis-exporter:9121']
 
   - job_name: 'cockroachdb'
     static_configs:

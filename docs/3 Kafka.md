@@ -248,6 +248,12 @@ docker exec -it distributed-ecom-kafka1-1 kafka-broker-api-versions.sh --bootstr
 
 
 ## Check Kafka Topics via CLI
+Disable JMX for CLI Commands
+```
+export KAFKA_OPTS=""
+kafka-topics.sh --bootstrap-server localhost:9092 --list
+```
+
 1.	Run the Kafka CLI inside the Docker container:
 ```
 docker exec -it <kafka_container_name> bash

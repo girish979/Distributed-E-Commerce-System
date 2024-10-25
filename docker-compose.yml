@@ -92,12 +92,13 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
-      #KAFKA_JMX_PORT: 9991
-      #KAFKA_OPTS: "-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.port=9991 -Dcom.sun.management.jmxremote.rmi.port=19991 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
+      KAFKA_JMX_PORT: 9991
+      KAFKA_OPTS: "-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.port=9991 -Dcom.sun.management.jmxremote.rmi.port=19991 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
     ports:
       - "9092:9092"
       - "29092:29092"
       - "9991:9991"
+      - "19991:19991"
     networks:
       - cockroachnet
     depends_on:
@@ -112,12 +113,13 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
-      #KAFKA_JMX_PORT: 9992
-      #KAFKA_OPTS: "-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.port=9992 -Dcom.sun.management.jmxremote.rmi.port=19992 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
+      KAFKA_JMX_PORT: 9992
+      KAFKA_OPTS: "-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.port=9992 -Dcom.sun.management.jmxremote.rmi.port=19992 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
     ports:
       - "9093:9093"
       - "29093:29093"
       - "9992:9992"
+      - "19992:19992"
     networks:
       - cockroachnet
     depends_on:
@@ -132,12 +134,13 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
-      #KAFKA_JMX_PORT: 9993
-      #KAFKA_OPTS: "-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.port=9993 -Dcom.sun.management.jmxremote.rmi.port=19993 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
+      KAFKA_JMX_PORT: 9993
+      KAFKA_OPTS: "-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.port=9993 -Dcom.sun.management.jmxremote.rmi.port=19993 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
     ports:
       - "9094:9094"
       - "29094:29094"
       - "9993:9993"
+      - "19993:19993"
     networks:
       - cockroachnet
     depends_on:
@@ -238,11 +241,21 @@ services:
     networks:
       - cockroachnet
 
+  redis-exporter:
+    image: oliver006/redis_exporter
+    ports:
+      - "9121:9121"
+    environment:
+      REDIS_ADDR: "redis-node1:6379,redis-node2:6380,redis-node3:6381,redis-node4:6382,redis-node5:6383,redis-node6:6384"
+    networks:
+      - cockroachnet
+
   # Prometheus service
   prometheus:
     image: prom/prometheus:latest
     volumes:
       - ./prometheus:/etc/prometheus
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
     ports:
