@@ -229,6 +229,16 @@ services:
     networks:
       - cockroachnet
 
+  redisinsight:
+    image: redis/redisinsight:latest
+    container_name: redisinsight
+    ports:
+      - "5540:5540"  # Expose RedisInsight on port 5540
+    volumes:
+      - redisinsight-data:/db  # Persistent volume for RedisInsight data
+    networks:
+      - cockroachnet
+
   # Prometheus service
   prometheus:
     image: prom/prometheus:latest
@@ -257,3 +267,6 @@ services:
 networks:
   cockroachnet:
     driver: bridge
+
+volumes:
+  redisinsight-data:  # Define a named volume for persistence
