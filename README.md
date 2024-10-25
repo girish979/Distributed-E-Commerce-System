@@ -13,3 +13,20 @@ Use node 20
 
 docker compose down
 docker compose up --build -d
+
+
+## UIs
+
+Cockroach DB UI
+```
+http://localhost:8080
+http://localhost:8081
+http://localhost:8082
+```
+
+Kafka
+```
+http://localhost:8090
+```
+
+

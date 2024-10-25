@@ -260,3 +260,6 @@ kafka-topics.sh --bootstrap-server localhost:9092 --list
 ```
 kafka-topics.sh --bootstrap-server localhost:9092 --describe --topic test-topic
 ```
+
+### CHeck number of partitions
+`kafka-topics.sh --describe --topic <your_topic_name> --bootstrap-server kafka1:9092`
