@@ -57,3 +57,16 @@ In the redis insight dash board add the hosts
 [http://localhost:3000/login](http://localhost:3000/login)
 
 
+## Generate Traffic
+
+use the scripts inside `/test` to generate traffic
+
+
+## Sample Data
+
+### Kafka
+![Kafka](docs/images/kafka-1.png)
+
+![alt text](docs/images/kafka-topic-1.png)
+
+![alt text](docs/images/kafka-messages-1.png)
