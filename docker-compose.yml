@@ -92,8 +92,13 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9092
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
+      # KAFKA_JMX_PORT: 9991
+      # KAFKA_OPTS: "-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.port=9991 -Dcom.sun.management.jmxremote.rmi.port=9991 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
+      # KAFKA_MESSAGE_MAX_BYTES: 200000000  # 200 MB
+      # KAFKA_REPLICA_FETCH_MAX_BYTES: 200000000  # 200 MB
     ports:
       - "9092:9092"
+      # - "9991:9991"
     networks:
       - cockroachnet
     depends_on:
@@ -107,8 +112,13 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9093
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
+      # KAFKA_JMX_PORT: 9992
+      # KAFKA_OPTS: "-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.port=9992 -Dcom.sun.management.jmxremote.rmi.port=9992 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
+      # KAFKA_MESSAGE_MAX_BYTES: 200000000  # 200 MB
+      # KAFKA_REPLICA_FETCH_MAX_BYTES: 200000000  # 200 MB
     ports:
       - "9093:9093"
+      # - "9992:9992"
     networks:
       - cockroachnet
     depends_on:
@@ -122,8 +132,14 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:9094
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
+      # KAFKA_JMX_PORT: 9993
+      # KAFKA_OPTS: "-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.port=9993 -Dcom.sun.management.jmxremote.rmi.port=9993 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
+      # KAFKA_MESSAGE_MAX_BYTES: 200000000  # 200 MB
+      # KAFKA_REPLICA_FETCH_MAX_BYTES: 200000000  # 200 MB
+    
     ports:
       - "9094:9094"
+      # - "9993:9993"
     networks:
       - cockroachnet
     depends_on:

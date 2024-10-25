@@ -4,7 +4,7 @@ global:
 scrape_configs:
   - job_name: 'kafka'
     static_configs:
-      - targets: ['kafka1:9092', 'kafka2:9093', 'kafka3:9094']
+      - targets: ['kafka1:9092', 'kafka2:9093', 'kafka3:9094','kafka1:9991', 'kafka2:9992', 'kafka3:9993']
 
   - job_name: 'redis'
     static_configs:
