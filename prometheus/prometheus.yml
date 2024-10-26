@@ -11,9 +11,9 @@ scrape_configs:
     static_configs:
       - targets: ['redis-exporter:9121']
 
-  - job_name: 'cockroachdb'
+  - job_name: 'cassandra'
     static_configs:
-      - targets: ['cockroachdb1:8080', 'cockroachdb2:8081', 'cockroachdb3:8082']
+      - targets: ['cassandra-exporter:8080']
 
   - job_name: 'node_exporter'
     static_configs:

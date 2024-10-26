@@ -1,7 +1,8 @@
+# WIP
 ## Overview
 
 1.	Setup Distributed  
-	- Database (Cockroach DB)  
+	- NoSQL Database (Cassandra)  
 	- Cache (Redis)  
 	- Event Processing (Kafka) 
 2. Codebase: Microservices written in Node.js.

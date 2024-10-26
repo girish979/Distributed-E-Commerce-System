@@ -1,48 +1,108 @@
 services:
-  cockroachdb1:
-    image: cockroachdb/cockroach:v21.1.6
-    command: start --insecure --join=cockroachdb1,cockroachdb2,cockroachdb3
+  cassandra-1:
+    image: "cassandra:latest"  # cassandra:4.1.3
+    container_name: "cassandra-1"
     ports:
-      - "26257:26257"
-      - "8080:8080"
-    volumes:
-      - ./cockroach-data1:/cockroach/cockroach-data
+      # - 7000:7000
+      - 9042:9042
     networks:
-      - cockroachnet
-    platform: linux/amd64
+      - cassandranet
+    environment:
+      - CASSANDRA_START_RPC=true       # default
+      - CASSANDRA_RPC_ADDRESS=0.0.0.0  # default
+      - CASSANDRA_LISTEN_ADDRESS=auto  # default, use IP addr of container # = CASSANDRA_BROADCAST_ADDRESS
+      - CASSANDRA_CLUSTER_NAME=my-cluster
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - CASSANDRA_DC=my-datacenter-1
+    volumes:
+      - cassandra-node-1:/var/lib/cassandra:rw
+    restart:
+      on-failure
+    healthcheck:
+      test: ["CMD-SHELL", "nodetool status"]
+      interval: 2m
+      start_period: 2m
+      timeout: 10s
+      retries: 3
 
-  cockroachdb2:
-    image: cockroachdb/cockroach:v21.1.6
-    command: start --insecure --join=cockroachdb1,cockroachdb2,cockroachdb3
+  cassandra-2:
+    image: "cassandra:latest"  # cassandra:4.1.3
+    container_name: "cassandra-2"
     ports:
-      - "26258:26257"
-      - "8081:8080"
-    volumes:
-      - ./cockroach-data2:/cockroach/cockroach-data
+      - 9043:9042
     networks:
-      - cockroachnet
-    platform: linux/amd64
-
-  cockroachdb3:
-    image: cockroachdb/cockroach:v21.1.6
-    command: start --insecure --join=cockroachdb1,cockroachdb2,cockroachdb3
-    ports:
-      - "26259:26257"
-      - "8082:8080"
-    volumes:
-      - ./cockroach-data3:/cockroach/cockroach-data
-    networks:
-      - cockroachnet
-    platform: linux/amd64
-
-  init:
-    image: cockroachdb/cockroach:v21.1.6
-    command: init --insecure --host=cockroachdb1
+      - cassandranet
+    environment:
+      - CASSANDRA_START_RPC=true       # default
+      - CASSANDRA_RPC_ADDRESS=0.0.0.0  # default
+      - CASSANDRA_LISTEN_ADDRESS=auto  # default, use IP addr of container # = CASSANDRA_BROADCAST_ADDRESS
+      - CASSANDRA_CLUSTER_NAME=my-cluster
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - CASSANDRA_DC=my-datacenter-1
+      - CASSANDRA_SEEDS=cassandra-1
     depends_on:
-      - cockroachdb1
+      cassandra-1:
+        condition: service_healthy
+    volumes:
+      - cassandra-node-2:/var/lib/cassandra:rw
+    restart:
+      on-failure
+    healthcheck:
+      test: ["CMD-SHELL", "nodetool status"]
+      interval: 2m
+      start_period: 2m
+      timeout: 10s
+      retries: 3
+
+  cassandra-3:
+    image: "cassandra:latest"  # cassandra:4.1.3
+    container_name: "cassandra-3"
+    ports:
+      - 9044:9042
     networks:
-      - cockroachnet
-    platform: linux/amd64
+      - cassandranet
+    environment:
+      - CASSANDRA_START_RPC=true       # default
+      - CASSANDRA_RPC_ADDRESS=0.0.0.0  # default
+      - CASSANDRA_LISTEN_ADDRESS=auto  # default, use IP addr of container # = CASSANDRA_BROADCAST_ADDRESS
+      - CASSANDRA_CLUSTER_NAME=my-cluster
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - CASSANDRA_DC=my-datacenter-1
+      - CASSANDRA_SEEDS=cassandra-1
+    depends_on:
+      cassandra-2:
+        condition: service_healthy
+    volumes:
+      - cassandra-node-3:/var/lib/cassandra:rw
+    restart:
+      on-failure
+    healthcheck:
+      test: ["CMD-SHELL", "nodetool status"]
+      interval: 2m
+      start_period: 2m
+      timeout: 10s
+      retries: 3
+
+  datastax-studio:
+    image: datastax/dse-studio
+    container_name: datastax-studio
+    ports:
+      - "9091:9091"
+    environment:
+      - DS_LICENSE=accept
+    networks:
+      - cassandranet
+# For Prometheus
+  # cassandra-exporter:
+  #   image: criteo/cassandra-exporter
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     CASSANDRA_HOST: cassandra-1  # Connect to Cassandra node
+  #   networks:
+  #     - cassandranet
+  #   platform: linux/arm64
+
 
   # Order Service
   order-service:
@@ -50,9 +110,9 @@ services:
     ports:
       - "3001:3001"
     depends_on:
-      - cockroachdb1
+      - cassandra-1
     networks:
-      - cockroachnet
+      - cassandranet
 
   # Inventory Service
   inventory-service:
@@ -60,9 +120,9 @@ services:
     ports:
       - "3002:3002"
     depends_on:
-      - cockroachdb1
+      - cassandra-1
     networks:
-      - cockroachnet
+      - cassandranet
 
   # Payment Service
   payment-service:
@@ -70,9 +130,9 @@ services:
     ports:
       - "3003:3003"
     depends_on:
-      - cockroachdb1
+      - cassandra-1
     networks:
-      - cockroachnet
+      - cassandranet
 
   zookeeper:
     image: bitnami/zookeeper:latest
@@ -81,7 +141,7 @@ services:
     ports:
       - "2181:2181"
     networks:
-      - cockroachnet
+      - cassandranet
 
   kafka1:
     image: bitnami/kafka:latest
@@ -100,7 +160,7 @@ services:
       - "9991:9991"
       - "19991:19991"
     networks:
-      - cockroachnet
+      - cassandranet
     depends_on:
       - zookeeper
 
@@ -121,7 +181,7 @@ services:
       - "9992:9992"
       - "19992:19992"
     networks:
-      - cockroachnet
+      - cassandranet
     depends_on:
       - zookeeper
 
@@ -142,7 +202,7 @@ services:
       - "9993:9993"
       - "19993:19993"
     networks:
-      - cockroachnet
+      - cassandranet
     depends_on:
       - zookeeper
   
@@ -155,7 +215,7 @@ services:
       - KAFKA_CLUSTERS_0_NAME=local
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka1:9092,kafka2:9093,kafka3:9094
     networks:
-      - cockroachnet
+      - cassandranet
     depends_on:
       - kafka1
       - kafka2
@@ -168,7 +228,7 @@ services:
     ports:
       - "6379:6379"
     networks:
-      - cockroachnet
+      - cassandranet
 
   redis-node2:
     image: redis:7.0
@@ -176,7 +236,7 @@ services:
     ports:
       - "6380:6380"
     networks:
-      - cockroachnet
+      - cassandranet
 
   redis-node3:
     image: redis:7.0
@@ -184,7 +244,7 @@ services:
     ports:
       - "6381:6381"
     networks:
-      - cockroachnet
+      - cassandranet
 
   redis-node4:
     image: redis:7.0
@@ -192,7 +252,7 @@ services:
     ports:
       - "6382:6382"
     networks:
-      - cockroachnet
+      - cassandranet
 
   redis-node5:
     image: redis:7.0
@@ -200,7 +260,7 @@ services:
     ports:
       - "6383:6383"
     networks:
-      - cockroachnet
+      - cassandranet
 
   redis-node6:
     image: redis:7.0
@@ -208,7 +268,7 @@ services:
     ports:
       - "6384:6384"
     networks:
-      - cockroachnet
+      - cassandranet
 
   redis-init:
     image: redis:7.0
@@ -229,7 +289,7 @@ services:
           redis-node4:6382 redis-node5:6383 redis-node6:6384 \
           --cluster-replicas 1 --cluster-yes
     networks:
-      - cockroachnet
+      - cassandranet
 
   redisinsight:
     image: redis/redisinsight:latest
@@ -239,7 +299,7 @@ services:
     volumes:
       - redisinsight-data:/db  # Persistent volume for RedisInsight data
     networks:
-      - cockroachnet
+      - cassandranet
 
   redis-exporter:
     image: oliver006/redis_exporter
@@ -248,7 +308,7 @@ services:
     environment:
       REDIS_ADDR: "redis-node1:6379,redis-node2:6380,redis-node3:6381,redis-node4:6382,redis-node5:6383,redis-node6:6384"
     networks:
-      - cockroachnet
+      - cassandranet
 
   # Prometheus service
   prometheus:
@@ -261,7 +321,7 @@ services:
     ports:
       - '9090:9090'
     networks:
-      - cockroachnet
+      - cassandranet
 
   # Grafana service
   grafana:
@@ -272,13 +332,16 @@ services:
     ports:
       - '3000:3000'
     networks:
-      - cockroachnet
+      - cassandranet
     depends_on:
       - prometheus
 
 networks:
-  cockroachnet:
+  cassandranet:
     driver: bridge
 
 volumes:
+  cassandra-node-1:
+  cassandra-node-2:
+  cassandra-node-3:
   redisinsight-data:  # Define a named volume for persistence
