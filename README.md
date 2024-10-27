@@ -78,7 +78,40 @@ Redis has slots from 0 to 16383.
 #connect to redis and run command
 % cluster slots
 ```
-![alt text](/docs/images/redis-3.png)
+
+```bash
+172.22.0.3:6379> cluster slots
+1) 1) (integer) 0 #slot start
+   2) (integer) 5460 # slot end
+   3) 1) "172.22.0.3" #IP address of node
+      2) (integer) 6379 # port of node
+      3) "4658fb1ad7578c3e8843f9ab3de701d4dfc5691f" # node id 
+      4) (empty array) # other info of node
+   4) 1) "172.22.0.4"  # replica node ip
+      2) (integer) 6383 #replica node port
+      3) "b03b20a6e2c0905e2ea67b9741ab09f2a994062c" # replica nodeid
+      4) (empty array)
+2) 1) (integer) 5461
+   2) (integer) 10922
+   3) 1) "172.22.0.14"
+      2) (integer) 6380
+      3) "eae3d9179b5938c6c2a873f2738fc30a73d0f0ae"
+      4) (empty array)
+   4) 1) "172.22.0.9"
+      2) (integer) 6384
+      3) "da07bf3599a4b5847ea38d8b28d828c6ef92da1b"
+      4) (empty array)
+3) 1) (integer) 10923
+   2) (integer) 16383
+   3) 1) "172.22.0.6"
+      2) (integer) 6381
+      3) "42a94dedfb760223fbeed0e7723707d4dd77ddfc"
+      4) (empty array)
+   4) 1) "172.22.0.8"
+      2) (integer) 6382
+      3) "e7c60f8f19042778870f8a2a5aa493c1ec320ca2"
+      4) (empty array)
+```
 
 - Slots 0-5460 -> node1
 - Slots 5461-10922 -> node2
